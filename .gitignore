@@ -1,0 +1,33 @@
+# Environment variables
+.env
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+.directory
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.backup
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Testing
+test-output/

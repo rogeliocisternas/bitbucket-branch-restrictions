@@ -15,7 +15,7 @@ Este repositorio contiene scripts de automatización que te permiten configurar 
 ### Prerrequisitos
 
 - Cuenta de Bitbucket con permisos de administrador
-- App Password de Bitbucket
+- API Token de Bitbucket (anteriormente App Password)
 - `curl` instalado
 - `jq` instalado (opcional, para formatear JSON)
 - Sistema Unix/Linux o macOS
@@ -77,14 +77,15 @@ También puedes ejecutar scripts individuales:
 
 ## 📝 Configuración
 
-### 1. Crear App Password en Bitbucket
+### 1. Crear API Token en Bitbucket
 
 1. Ve a tu perfil de Bitbucket
-2. Settings → Personal settings → App passwords
-3. Crea un nuevo App Password con los siguientes permisos:
-   - **Repositories**: Admin, Write
-   - **Pull requests**: Write
-4. Copia el password generado (solo se muestra una vez)
+2. Settings → Personal settings → App passwords (el nombre es legacy, pero ahora genera API tokens)
+3. Crea un nuevo token con los siguientes permisos:
+   - **Account**: Read
+   - **Repositories**: Admin, Write, Read
+   - **Pull requests**: Read, Write
+4. Copia el token generado (solo se muestra una vez)
 
 ### 2. Configurar Variables de Entorno
 
@@ -94,8 +95,7 @@ Edita el archivo `.env`:
 BITBUCKET_URL="https://api.bitbucket.org/2.0"
 WORKSPACE="tu-workspace"
 REPO_SLUG="tu-repositorio"
-USERNAME="tu-usuario"
-APP_PASSWORD="tu-app-password"
+API_TOKEN="tu-api-token"
 ```
 
 ### 3. Obtener UUIDs de Usuarios
@@ -170,8 +170,11 @@ Para configurar los revisores predeterminados, necesitas los UUIDs de los usuari
 ## 🛠️ Troubleshooting
 
 ### Error 401: Unauthorized
-- Verifica que tu App Password sea correcto
-- Asegúrate de que el App Password tenga los permisos necesarios
+- Verifica que tu API Token sea correcto
+- Asegúrate de que el token tenga los permisos necesarios:
+  - Account: Read
+  - Repositories: Admin, Write, Read
+  - Pull requests: Read, Write
 
 ### Error 403: Forbidden
 - Verifica que tengas permisos de administrador en el repositorio
