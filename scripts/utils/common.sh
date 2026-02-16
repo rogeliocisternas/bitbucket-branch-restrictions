@@ -76,11 +76,11 @@ load_env() {
     set +a
     
     # Verificar variables requeridas
-    local required_vars=("BITBUCKET_URL" "WORKSPACE" "REPO_SLUG" "USERNAME" "APP_PASSWORD")
+    local required_vars=("BITBUCKET_URL" "WORKSPACE" "REPO_SLUG" "API_TOKEN")
     local missing_vars=()
     
     for var in "${required_vars[@]}"; do
-        if [ -z "">${!var}" ]; then
+        if [ -z "${!var}" ]; then
             missing_vars+=("$var")
         fi
     done
@@ -107,13 +107,13 @@ bitbucket_api_call() {
     
     if [ -n "$data" ]; then
         response=$(curl -s -w "\n%{http_code}" -X "$method" \
-            -u "${USERNAME}:${APP_PASSWORD}" \
+            -H "Authorization: Bearer ${API_TOKEN}" \
             -H "Content-Type: application/json" \
             -d "$data" \
             "$url")
     else
         response=$(curl -s -w "\n%{http_code}" -X "$method" \
-            -u "${USERNAME}:${APP_PASSWORD}" \
+            -H "Authorization: Bearer ${API_TOKEN}" \
             "$url")
     fi
     

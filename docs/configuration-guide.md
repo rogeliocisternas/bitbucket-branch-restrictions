@@ -6,23 +6,30 @@ Esta guía proporciona instrucciones detalladas para la configuración de restri
 ## Instrucciones de Instalación Paso a Paso
 1. **Acceso a tu Repositorio**: Abre tu repositorio en Bitbucket.
 2. **Configuración del Entorno**: Crea un archivo `.env` y añade las siguientes variables:
-   - `BITBUCKET_USERNAME`: Tu nombre de usuario de Bitbucket.
-   - `BITBUCKET_APP_PASSWORD`: Tu contraseña de aplicación Bitbucket.
-3. **Autenticación**: Usar el nombre de usuario y la contraseña de aplicación para autenticarse con la API.
+   - `WORKSPACE`: El workspace de Bitbucket.
+   - `REPO_SLUG`: El slug del repositorio.
+   - `API_TOKEN`: Tu token de API de Bitbucket.
+3. **Autenticación**: Usar el token de API para autenticarse con la API usando Bearer token.
 
-## Cómo Crear una Contraseña de Aplicación de Bitbucket
+## Cómo Crear un Token de API de Bitbucket
 1. Ve a la sección de **Configuraciones de Cuenta**.
-2. Selecciona **Contraseñas de Aplicación**.
-3. Crea una nueva contraseña para tu aplicación.
+2. Selecciona **App passwords** (nombre legacy, ahora genera tokens).
+3. Crea un nuevo token con los siguientes permisos:
+   - Account: Read
+   - Repositories: Admin, Write, Read
+   - Pull requests: Read, Write
+4. Copia el token generado (solo se muestra una vez).
 
 ### Capturas de Pantalla
-![Captura de Pantalla de Crear Contraseña de Aplicación](url_de_la_imagen)
+![Captura de Pantalla de Crear Token de API](url_de_la_imagen)
 
 ## Configuración del Archivo .env
 Asegúrate de que tu archivo `.env` contenga la información necesaria:
 ```
-BITBUCKET_USERNAME=tu_usuario
-BITBUCKET_APP_PASSWORD=tu_contraseña
+BITBUCKET_URL="https://api.bitbucket.org/2.0"
+WORKSPACE=tu_workspace
+REPO_SLUG=tu_repositorio
+API_TOKEN=tu_token_api
 ```
 
 ## Obtención de UUIDs de Usuario
@@ -40,7 +47,8 @@ GET /rest/api/1.0/users
 - **Error 403**: Permiso denegado - Asegúrate de tener permisos adecuados.
 
 ## Mejores Prácticas para la Protección de Ramas
-- Siempre usa contraseñas de aplicación.
+- Siempre usa tokens de API con permisos mínimos necesarios.
+- Protege tus tokens de API y no los publiques en repositorios.
 - Implementa revisiones de código obligatorias.
 
 ## Alternativas de Configuración Manual en la UI de Bitbucket

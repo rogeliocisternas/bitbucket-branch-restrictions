@@ -1,13 +1,19 @@
 #!/bin/bash
 
-# Load common functions
-source utils/common.sh
+# Script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Validate environment variables
-if [[ -z "$BITBUCKET_USERNAME" || -z "$BITBUCKET_PASSWORD" || -z "$REPO_SLUG" ]]; then
-  echo "Please set BITBUCKET_USERNAME, BITBUCKET_PASSWORD, and REPO_SLUG environment variables."
-  exit 1
-fi
+# Load common functions
+source "$SCRIPT_DIR/utils/common.sh"
+
+# Check dependencies
+check_dependencies
+
+# Load environment variables from .env file in repository root
+load_env "$SCRIPT_DIR/../.env"
+
+# Display header
+header "Configurando Permisos de Repositorio"
 
 # Assign permissions to groups using Bitbucket API
 declare -A permissions
@@ -19,12 +25,15 @@ permissions=(
   [qa-canalesdigitales]="write"
 )
 
+info "Asignando permisos a grupos..."
+
 for group in "${!permissions[@]}"; do
-  curl -X PUT -u "$BITBUCKET_USERNAME:$BITBUCKET_PASSWORD" \
-    "https://api.bitbucket.org/2.0/repositories/"></>rogeliocisternas/$REPO_SLUG/permissions-config/groups/$group" \
-    -H 'Content-Type: application/json' \
-    -d '{"permission": "${permissions[$group]}"}'
+  local permission="${permissions[$group]}"
+  local endpoint="/repositories/$WORKSPACE/$REPO_SLUG/permissions-config/groups/$group"
+  local data="{\"permission\": \"$permission\"}"
+  
+  bitbucket_api_call "PUT" "$endpoint" "$data" "Permiso '$permission' asignado al grupo '$group'"
 done
 
-echo "Permissions assigned successfully.
-"
+echo ""
+success "¡Todos los permisos fueron asignados exitosamente!"

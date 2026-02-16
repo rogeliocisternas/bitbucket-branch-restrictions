@@ -1,11 +1,11 @@
 # Bitbucket API Reference
 
 ## Authentication
-Bitbucket API uses OAuth for authentication. You can also use basic authentication. To perform API calls, you must acquire an access token or use your Bitbucket username and app password.
+Bitbucket API usa OAuth o tokens de API para autenticación. Para realizar llamadas a la API, debes usar un token de API (Bearer token).
 
-### Example using cURL:
+### Example usando cURL:
 ```bash
-curl -u username:app_password https://api.bitbucket.org/2.0/user
+curl -H "Authorization: Bearer YOUR_API_TOKEN" https://api.bitbucket.org/2.0/user
 ```
 
 ## Repository Permissions Endpoints
@@ -15,7 +15,7 @@ curl -u username:app_password https://api.bitbucket.org/2.0/user
 
 ### Example:
 ```bash
-curl -X GET -u username:app_password https://api.bitbucket.org/2.0/repositories/username/reponame/permissions/
+curl -X GET -H "Authorization: Bearer YOUR_API_TOKEN" https://api.bitbucket.org/2.0/repositories/username/reponame/permissions/
 ```
 - **Response Example:**
 ```json
@@ -46,7 +46,7 @@ The following types of restrictions can be applied:
 
 ### Example to Set a Push Restriction:
 ```bash
-curl -X POST -u username:app_password \
+curl -X POST -H "Authorization: Bearer YOUR_API_TOKEN" \
 -H "Content-Type: application/json" \
 -d '{"kind": "push", "users": ["user1", "user2"]}' \
 https://api.bitbucket.org/2.0/repositories/username/reponame/branch-restrictions/
@@ -67,7 +67,7 @@ https://api.bitbucket.org/2.0/repositories/username/reponame/branch-restrictions
 
 ### Example:
 ```bash
-curl -X GET -u username:app_password https://api.bitbucket.org/2.0/users/
+curl -X GET -H "Authorization: Bearer YOUR_API_TOKEN" https://api.bitbucket.org/2.0/users/
 ```
 
 ## HTTP Response Codes
@@ -97,8 +97,8 @@ curl -X GET -u username:app_password https://api.bitbucket.org/2.0/users/
 - **Branching Model:** Uses the defined branching strategy of the repository.
 
 ## Development Tips
-Use [jq](https://stedolan.github.io/jq/) for parsing JSON responses:
+Use [jq](https://stedolan.github.io/jq/) para parsear respuestas JSON:
 ```bash
-curl -X GET -u username:app_password https://api.bitbucket.org/2.0/repositories/username/reponame/permissions/ | jq '.permissions[] | .type'
+curl -X GET -H "Authorization: Bearer YOUR_API_TOKEN" https://api.bitbucket.org/2.0/repositories/username/reponame/permissions/ | jq '.permissions[] | .type'
 ```
 
